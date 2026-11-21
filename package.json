@@ -1,0 +1,12 @@
+{
+  "name": "token-radar-01",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Build the best token launch radar: a snapshot in, a ranked pre-token board and a static dashboard out.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node main.ts --input /input",
+    "build:dev": "MAKEFUN_OUTPUT_DIR=out node main.ts --input ../token-radar-01-kit/input/snapshot.json"
+  }
+}

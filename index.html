@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar: pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#board">Skip to the board</a>
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <div>
+        <h1>Token Radar</h1>
+        <p class="tagline">Pre-token protocols ranked by an implied value the snapshot itself supports.</p>
+      </div>
+    </div>
+    <dl class="stamp" id="stamp"></dl>
+  </div>
+</header>
+
+<main>
+  <section class="panel explainer" id="explainer" aria-labelledby="explainer-h">
+    <div class="explainer-head">
+      <h2 id="explainer-h">How a row is priced</h2>
+      <p class="lede" id="explainer-lede"></p>
+    </div>
+    <ol class="formula" id="formula"></ol>
+    <div class="explainer-grid">
+      <figure class="constants">
+        <figcaption>Constants</figcaption>
+        <table id="constants"></table>
+      </figure>
+      <figure class="comparables">
+        <figcaption>Comparables: mcap / TVL medians, per category</figcaption>
+        <div class="cmp-scroll"><table id="comparables"></table></div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="panel board-panel" id="board" aria-labelledby="board-h">
+    <div class="board-head">
+      <div class="tabs" role="tablist" aria-label="View">
+        <button role="tab" data-tab="pre" class="tab is-on" id="tab-pre" aria-selected="true" aria-controls="table-wrap">Pre-token board</button>
+        <button role="tab" data-tab="live" class="tab" id="tab-live" aria-selected="false" aria-controls="table-wrap">Live token view</button>
+      </div>
+      <h2 id="board-h" class="board-title"></h2>
+    </div>
+    <p class="board-sub" id="board-sub"></p>
+
+    <div class="controls" id="controls">
+      <label class="field grow">
+        <span>Search</span>
+        <input id="q" type="search" placeholder="protocol, category or chain" autocomplete="off">
+      </label>
+      <label class="field">
+        <span>Category</span>
+        <select id="f-category"></select>
+      </label>
+      <label class="field">
+        <span>Chain</span>
+        <select id="f-chain"></select>
+      </label>
+      <div class="field">
+        <span>Scope</span>
+        <div class="seg" id="f-scope" role="group" aria-label="Scope">
+          <button data-scope="all" class="is-on">All</button>
+          <button data-scope="watchlist">Watchlist</button>
+          <button data-scope="early">Off-watchlist</button>
+        </div>
+      </div>
+      <button class="ghost" id="reset" type="button">Reset</button>
+    </div>
+
+    <p class="count" id="count" role="status" aria-live="polite"></p>
+
+    <div class="table-wrap" id="table-wrap">
+      <table class="board" id="table">
+        <thead>
+          <tr id="head-row"></tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <p class="empty" id="empty" hidden>No protocol matches these filters. Reset the scope or clear the search.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p id="foot-source"></p>
+  <p>No network: every figure on this page comes from the snapshot shipped with the entry, written into <code>data.js</code> by <code>main.ts</code>. A protocol that records no token is not a protocol without one; the snapshot is DefiLlama's record, and the ranking is the entry's reading of it, not investment advice.</p>
+</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detail-name" hidden>
+  <div class="detail-bar">
+    <button class="close" id="detail-close" type="button" aria-label="Close detail view">Close</button>
+    <span class="crumb" id="detail-crumb"></span>
+  </div>
+  <div class="detail-body" id="detail-body"></div>
+</aside>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
