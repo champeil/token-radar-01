@@ -80,6 +80,21 @@
     });
   })();
 
+  // ---------- board-panel model summary ----------
+  // Sits directly above the table header, so the formula and its real inputs are on screen at the same
+  // time as the numbers they produce. Every figure is read out of data.js, never typed in here.
+  (function howto() {
+    var m = D.model;
+    document.getElementById('howto-eq').textContent =
+      'implied FDV = category median mcap/TVL of live-token protocols x TVL x growth multiplier x maturity multiplier';
+    document.getElementById('howto-stats').textContent =
+      'Global median multiple ' + mult(D.global_multiple) + '  \u00B7  ' + D.comparables.length + ' categories  \u00B7  ' +
+      D.global_comparables + ' live-token comparables  \u00B7  ' + D.snapshot_size + ' protocols in the snapshot';
+    document.getElementById('howto-note').textContent =
+      'Each category is priced off its own live-token peers; the global median stands in only when a category has fewer than ' +
+      m.min_comparables + ' of them. Growth comes from the 7-day TVL change, maturity from age since listing.';
+  })();
+
   // ---------- explainer ----------
   (function explainer() {
     var m = D.model;
@@ -385,6 +400,8 @@
 
   function render() {
     boardTitle();
+    // The panel explains the model behind the ranked board; the live view is the market's own figures.
+    document.getElementById('howto').hidden = state.tab === 'live';
     var rows = visibleRows();
     renderHead();
     renderBody(rows);
@@ -430,34 +447,53 @@
     body.appendChild(head);
     body.appendChild(text('p', 'sub', (r.category || '(no category)') + ' \u00B7 ranked ' + r.rank + ' \u00B7 ' + (r.on_watchlist ? 'on the watchlist' : 'ranked outside the watchlist')));
 
-    // model breakdown
+    // The model breakdown leads: implied value, then each factor with where it came from. The farm plan
+    // follows. A reader who opens a row should see how the number was made before what to do about it.
     var calc = recompute(r);
+    var m = D.model;
     var mb = section(body, 'Model breakdown');
     var wrap = document.createElement('div');
     wrap.className = 'breakdown';
+
+    var lead = document.createElement('div');
+    lead.className = 'calc head';
+    lead.appendChild(text('span', null, 'Implied FDV for this protocol'));
+    lead.appendChild(text('span', 'v', money(r.implied_value_usd)));
+    lead.appendChild(text('span', 'op', 'what the snapshot\u2019s own live-token protocols imply this protocol is worth at launch'));
+    wrap.appendChild(lead);
+
     var cat = cmpByCategory[r.category || '(none)'];
+    var sourceText = r.model.multiple_source === 'category'
+      ? 'category median: ' + r.model.comparables + ' live-token ' + (r.category || 'uncategorised') + ' peers'
+      : 'global median: this category carries ' + r.model.comparables + ' live-token peer' + (r.model.comparables === 1 ? '' : 's') + ', under the ' + m.min_comparables + ' needed';
+
     [
-      ['TVL', money(r.tvl_usd)],
-      ['x base multiple', mult(r.model.base_multiple) + (r.model.multiple_source === 'category' ? ' (category median)' : ' (global median: ' + r.model.comparables + ' live names in this category)')],
-      ['= base', money(calc.base)],
-      ['x growth ' + pct(calc.growth) + ' clamped', mult(calc.growthMult)],
-      ['x maturity, age ' + age(r.age_days), mult(calc.maturity)]
+      ['TVL, from the snapshot', money(r.tvl_usd), 'total value locked'],
+      ['\u00D7 base multiple', mult(r.model.base_multiple), sourceText],
+      ['\u00D7 growth multiplier', mult(calc.growthMult),
+        'from a 7-day TVL change of ' + pct(r.change_7d) + ', clamped to [' + m.growth_floor + '%, +' + m.growth_cap + '%] and scaled by ' + m.growth_weight],
+      ['\u00D7 maturity multiplier', mult(calc.maturity),
+        r.age_days === null
+          ? 'no listed_at recorded, so the neutral ' + m.neutral_maturity + ' applies'
+          : 'from ' + r.age_days + ' days since listing (' + age(r.age_days) + '), rising toward ' + (m.maturity_floor + m.maturity_range).toFixed(2) + ' at ' + m.maturity_days + ' days']
     ].forEach(function (p) {
       var d = document.createElement('div');
       d.className = 'calc';
       d.appendChild(text('span', null, p[0]));
       d.appendChild(text('span', 'v', p[1]));
+      d.appendChild(text('span', 'op', p[2]));
       wrap.appendChild(d);
     });
+
     var total = document.createElement('div');
     total.className = 'calc total';
-    total.appendChild(text('span', null, 'implied value'));
+    total.appendChild(text('span', null, '= implied FDV'));
     total.appendChild(text('span', 'v', money(r.implied_value_usd)));
+    total.appendChild(text('span', 'op', money(r.tvl_usd) + ' \u00D7 ' + r.model.factors[0].toFixed(4) + ' \u00D7 ' + r.model.factors[1].toFixed(4) + ' \u00D7 ' + r.model.factors[2].toFixed(4) + ' = ' + money(calc.implied)));
     wrap.appendChild(total);
-    wrap.firstChild.appendChild(text('span', 'op', 'tvl_usd x median(mcap/tvl of live peers) x growthMult x maturityMult'));
     mb.appendChild(wrap);
     mb.appendChild(text('p', 'sub check', calc.agrees
-      ? 'The page recomputes this from the snapshot figures and gets the board\'s number exactly.'
+      ? 'The page recomputes this from the snapshot figures and gets the board\u2019s number exactly.'
       : 'The page recomputed ' + money(calc.implied) + ' from these figures; the board carries ' + money(r.implied_value_usd) + '.'));
 
     // comparables
@@ -465,8 +501,8 @@
     cs.appendChild(text('p', 'sub', cat === undefined
       ? 'This category carries no live-token protocol, so the global median across ' + D.global_comparables + ' live protocols is used: ' + mult(D.global_multiple) + '.'
       : cat.source === 'category'
-        ? 'The median of ' + cat.comparables + ' live-token ' + cat.category + ' protocols is ' + mult(cat.multiple) + '. The names nearest that median:'
-        : cat.category + ' carries only ' + cat.comparables + ' live-token protocol' + (cat.comparables === 1 ? '' : 's') + ', under the ' + D.model.min_comparables + ' needed, so the global median ' + mult(D.global_multiple) + ' is used. The nearest live names overall:'));
+        ? 'The median of ' + cat.comparables + ' live-token ' + cat.category + ' protocols is ' + mult(cat.multiple) + '. These are the names nearest that median; the multiple is their median mcap/TVL, applied to this protocol\u2019s TVL.'
+        : cat.category + ' carries only ' + cat.comparables + ' live-token protocol' + (cat.comparables === 1 ? '' : 's') + ', under the ' + D.model.min_comparables + ' needed, so the global median ' + mult(D.global_multiple) + ' across ' + D.global_comparables + ' live protocols is used. The category\u2019s own live names:'));
     if (cat !== undefined && cat.examples.length > 0) {
       var list = document.createElement('div');
       list.className = 'cmp-list';
