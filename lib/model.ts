@@ -197,6 +197,8 @@ export interface RadarData {
   as_of: string;
   source: string;
   floor_usd: number;
+  /** How many protocols the snapshot carries, in total. Display only: the panel states the universe size. */
+  snapshot_size: number;
   model: ModelConstants;
   model_version: string;
   watchlist_size: number;
@@ -577,6 +579,7 @@ export function buildRadar(snapshot: Snapshot, model: ModelConstants = MODEL): {
     as_of: snapshot.as_of,
     source: snapshot.source,
     floor_usd: snapshot.floor_usd,
+    snapshot_size: snapshot.protocols.length,
     model,
     model_version: MODEL_VERSION,
     watchlist_size: snapshot.watchlist.length,
