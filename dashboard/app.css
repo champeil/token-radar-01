@@ -225,10 +225,11 @@ table.board { width: 100%; border-collapse: separate; border-spacing: 0; font-si
   background: var(--surface-2); border: 1px solid var(--line); color: var(--ink);
   border-radius: var(--r-sm); padding: 4px var(--s3); font-size: 12px;
 }
-.detail-body { padding: var(--s5); overflow: auto; }
-.detail h2 { font-size: 24px; }
-.detail .sub { color: var(--muted); font-size: 12.5px; margin-top: var(--s1); font-family: var(--mono); }
-.dsec { margin-top: var(--s5); }
+.detail-body { padding: var(--s4) var(--s5) var(--s5); overflow: auto; }
+.detail h2 { font-size: 22px; }
+.detail .sub { color: var(--muted); font-size: 12.5px; margin-top: 2px; font-family: var(--mono); }
+.dsec { margin-top: var(--s4); }
+.dsec:first-of-type { margin-top: var(--s3); }
 .dsec > h3 {
   font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted);
   margin-bottom: var(--s2); font-weight: 600;
@@ -237,12 +238,12 @@ table.board { width: 100%; border-collapse: separate; border-spacing: 0; font-si
 .kv div { background: var(--surface-2); padding: var(--s2) var(--s3); }
 .kv dt { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
 .kv dd { margin: 0; font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
-.breakdown { display: grid; gap: var(--s2); }
-.sub.check { margin-top: var(--s2); color: var(--accent); }
+.breakdown { display: grid; gap: 6px; }
+.sub.check { margin-top: 6px; color: var(--accent); }
 .calc {
-  display: grid; grid-template-columns: 1fr auto; gap: var(--s2);
+  display: grid; grid-template-columns: 1fr auto; gap: 4px var(--s2);
   background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-md);
-  padding: var(--s3); font-size: 13px;
+  padding: 9px var(--s3); font-size: 13px;
 }
 .calc .op { font-family: var(--mono); color: var(--ink-soft); font-size: 12px; grid-column: 1 / -1; }
 .calc .v { font-family: var(--mono); color: var(--accent); }
@@ -250,15 +251,15 @@ table.board { width: 100%; border-collapse: separate; border-spacing: 0; font-si
 .calc.total .v { font-size: 15px; font-weight: 700; }
 .calc.head { background: rgba(110, 231, 168, 0.07); border-color: rgba(110, 231, 168, 0.35); }
 .calc.head .v { font-size: 20px; font-weight: 700; }
-.calc .op { line-height: 1.4; }
+.calc .op { line-height: 1.35; }
 .cmp-list { display: grid; gap: 3px; font-size: 12.5px; }
 .cmp-list div { display: flex; justify-content: space-between; gap: var(--s3); padding: 4px var(--s2); border-bottom: 1px dashed var(--line); }
 .cmp-list span:last-child { font-family: var(--mono); color: var(--ink-soft); }
-.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); counter-reset: s; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; counter-reset: s; }
 .steps li {
   display: grid; grid-template-columns: 24px 1fr; gap: var(--s3);
   background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-md);
-  padding: var(--s3); font-size: 13px; color: var(--ink-soft);
+  padding: 10px var(--s3); font-size: 13px; color: var(--ink-soft);
 }
 .steps li::before {
   counter-increment: s; content: counter(s);
