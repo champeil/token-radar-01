@@ -448,7 +448,8 @@
     body.appendChild(text('p', 'sub', (r.category || '(no category)') + ' \u00B7 ranked ' + r.rank + ' \u00B7 ' + (r.on_watchlist ? 'on the watchlist' : 'ranked outside the watchlist')));
 
     // The model breakdown leads: implied value, then each factor with where it came from. The farm plan
-    // follows. A reader who opens a row should see how the number was made before what to do about it.
+    // follows it directly, then the comparables. A reader who opens a row should see how the number was
+    // made before what to do about it, and the evidence last.
     var calc = recompute(r);
     var m = D.model;
     var mb = section(body, 'Model breakdown');
@@ -496,26 +497,7 @@
       ? 'The page recomputes this from the snapshot figures and gets the board\u2019s number exactly.'
       : 'The page recomputed ' + money(calc.implied) + ' from these figures; the board carries ' + money(r.implied_value_usd) + '.'));
 
-    // comparables
-    var cs = section(body, 'Comparables behind this multiple');
-    cs.appendChild(text('p', 'sub', cat === undefined
-      ? 'This category carries no live-token protocol, so the global median across ' + D.global_comparables + ' live protocols is used: ' + mult(D.global_multiple) + '.'
-      : cat.source === 'category'
-        ? 'The median of ' + cat.comparables + ' live-token ' + cat.category + ' protocols is ' + mult(cat.multiple) + '. These are the names nearest that median; the multiple is their median mcap/TVL, applied to this protocol\u2019s TVL.'
-        : cat.category + ' carries only ' + cat.comparables + ' live-token protocol' + (cat.comparables === 1 ? '' : 's') + ', under the ' + D.model.min_comparables + ' needed, so the global median ' + mult(D.global_multiple) + ' across ' + D.global_comparables + ' live protocols is used. The category\u2019s own live names:'));
-    if (cat !== undefined && cat.examples.length > 0) {
-      var list = document.createElement('div');
-      list.className = 'cmp-list';
-      cat.examples.forEach(function (e) {
-        var d = document.createElement('div');
-        d.appendChild(text('span', null, e.name + '  ' + money(e.tvl_usd) + ' TVL'));
-        d.appendChild(text('span', null, money(e.mcap_usd) + ' \u00B7 ' + mult(e.multiple)));
-        list.appendChild(d);
-      });
-      cs.appendChild(list);
-    }
-
-    // farm plan
+    // farm plan, directly under the model: the reader sees how the number was made, then what to do about it.
     var fs = section(body, 'Farm plan: what to do, what it costs, how long');
     var ol = document.createElement('ol');
     ol.className = 'steps';
@@ -534,6 +516,25 @@
       ol.appendChild(li);
     });
     fs.appendChild(ol);
+
+    // comparables, last: the evidence behind the multiple sits under the plan it justifies.
+    var cs = section(body, 'Comparables behind this multiple');
+    cs.appendChild(text('p', 'sub', cat === undefined
+      ? 'This category carries no live-token protocol, so the global median across ' + D.global_comparables + ' live protocols is used: ' + mult(D.global_multiple) + '.'
+      : cat.source === 'category'
+        ? 'The median of ' + cat.comparables + ' live-token ' + cat.category + ' protocols is ' + mult(cat.multiple) + '. These are the names nearest that median; the multiple is their median mcap/TVL, applied to this protocol\u2019s TVL.'
+        : cat.category + ' carries only ' + cat.comparables + ' live-token protocol' + (cat.comparables === 1 ? '' : 's') + ', under the ' + D.model.min_comparables + ' needed, so the global median ' + mult(D.global_multiple) + ' across ' + D.global_comparables + ' live protocols is used. The category\u2019s own live names:'));
+    if (cat !== undefined && cat.examples.length > 0) {
+      var list = document.createElement('div');
+      list.className = 'cmp-list';
+      cat.examples.forEach(function (e) {
+        var d = document.createElement('div');
+        d.appendChild(text('span', null, e.name + '  ' + money(e.tvl_usd) + ' TVL'));
+        d.appendChild(text('span', null, money(e.mcap_usd) + ' \u00B7 ' + mult(e.multiple)));
+        list.appendChild(d);
+      });
+      cs.appendChild(list);
+    }
 
     // snapshot facts
     var sf = section(body, 'Snapshot record');
