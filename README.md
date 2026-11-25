@@ -69,15 +69,16 @@ Either way it writes:
 
 - `board.json` — the ranked board, `{ rows: [...] }`, 197 rows with ranks 1..197 on the shipped snapshot
 - `data.js` — `window.RADAR`, the dashboard's whole dataset
-- `dashboard/` — `index.html`, `app.css`, `app.js` (about 46 KB, under the 64 KB cap)
+- `dashboard/` — `index.html`, `app.css`, `app.js` (about 51 KB, under the 64 KB cap)
 - `screenshots/` — the board, a detail view and a filtered view
 - `dossier.json` — built by `buildDossier` from `vendor/makefun-board.ts`
 
 Open `out/dashboard/index.html` from a served directory (`python3 -m http.server`
 in `out/`) to use the page: sortable columns, a search box, category and chain
 filters, a watchlist/off-watchlist scope, a live-token tab, and a detail drawer per
-protocol with its model breakdown, the comparables behind its multiple, and its farm
-plan — every step of which states a cost and a time.
+protocol with its model breakdown, then its farm plan, then the comparables behind its
+multiple — every step of the plan states a cost and a time. The detail screenshot shows
+the derivation and the first steps of the plan in one frame.
 
 ## Layout
 
