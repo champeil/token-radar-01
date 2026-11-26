@@ -69,8 +69,8 @@ Either way it writes:
 
 - `board.json` — the ranked board, `{ rows: [...] }`, 197 rows with ranks 1..197 on the shipped snapshot
 - `data.js` — `window.RADAR`, the dashboard's whole dataset
-- `dashboard/` — `index.html`, `app.css`, `app.js` (about 51 KB, under the 64 KB cap)
-- `screenshots/` — the board, a detail view and a filtered view
+- `dashboard/` — `index.html`, `app.css`, `app.js` (about 56 KB, under the 64 KB cap)
+- `screenshots/` — the board, a detail view, a filtered view, and the worked farm plan
 - `dossier.json` — built by `buildDossier` from `vendor/makefun-board.ts`
 
 Open `out/dashboard/index.html` from a served directory (`python3 -m http.server`
@@ -79,6 +79,13 @@ filters, a watchlist/off-watchlist scope, a live-token tab, and a detail drawer 
 protocol with its model breakdown, then its farm plan, then the comparables behind its
 multiple — every step of the plan states a cost and a time. The detail screenshot shows
 the derivation and the first steps of the plan in one frame.
+
+The page also carries the top-ranked protocol's farm plan as **static text** in
+`index.html`, between the pricing explainer and the board: rank, implied value, TVL and
+the seven steps with their cost and time, quoted character for character from
+`board.json`. So the plan is readable even where the drawer's screenshot is not, and a
+reader can check the words against the data file. `screenshots/4-worked.png` is that
+panel in one frame: all seven steps, each with its cost and its time.
 
 ## Layout
 
@@ -89,7 +96,7 @@ dashboard/index.html    the page
 dashboard/app.css       one palette, one type scale, one spacing scale
 dashboard/app.js        renders window.RADAR: board, filters, detail drawer
 vendor/makefun-board.ts vendored buildDossier (copied from the kit, not modified)
-screenshots/            1-board.png, 2-detail.png, 3-filtered.png
+screenshots/            1-board.png, 2-detail.png, 3-filtered.png, 4-worked.png
 ```
 
 ## Reading the numbers honestly
