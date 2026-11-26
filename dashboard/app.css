@@ -113,6 +113,20 @@ figcaption {
 .pill.cat { border-color: rgba(110, 231, 168, 0.4); color: var(--accent); }
 .pill.glob { border-color: rgba(242, 180, 94, 0.4); color: var(--warn); }
 
+/* ---------- worked farm plan ---------- */
+.worked { display: grid; gap: var(--s4); }
+.worked-head { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, 1fr); gap: var(--s5); align-items: start; }
+.worked-method { color: var(--ink-soft); font-size: 13.5px; max-width: 74ch; margin-top: var(--s2); }
+.worked-meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin: 0; background: var(--line); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.worked-meta div { background: var(--surface-2); padding: var(--s2) var(--s3); }
+.worked-meta dt { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+.worked-meta dd { margin: 1px 0 0; font-family: var(--mono); font-size: 12px; color: var(--ink); }
+.worked-steps { grid-template-columns: 1fr; gap: 5px; }
+.worked-steps li { font-size: 12.5px; line-height: 1.5; padding: 7px var(--s3); grid-template-columns: 20px 1fr; gap: var(--s2); align-items: start; }
+.worked-steps li::before { width: 20px; height: 20px; font-size: 10px; }
+.worked-steps .ct { margin-top: 3px; font-size: 10.5px; }
+.worked-foot { font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: var(--s3); }
+.worked-foot code { color: var(--ink-soft); }
 /* ---------- board ---------- */
 .board-panel { padding: 0; overflow: hidden; }
 .board-head { display: flex; align-items: center; gap: var(--s4); padding: var(--s4) var(--s5) 0; flex-wrap: wrap; }
@@ -276,6 +290,9 @@ table.board { width: 100%; border-collapse: separate; border-spacing: 0; font-si
 
 @media (max-width: 880px) {
   .explainer-grid { grid-template-columns: 1fr; }
+  .worked-head { grid-template-columns: 1fr; }
+  .worked-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .worked-steps { grid-template-columns: 1fr; }
   .masthead-inner { padding: var(--s4); }
   main { padding: var(--s4); gap: var(--s4); }
   .panel { padding: var(--s4); }
